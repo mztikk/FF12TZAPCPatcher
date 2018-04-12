@@ -92,6 +92,8 @@
             this.Controls.Add(this.btnRestore);
             this.Controls.Add(this.btnPatch);
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(270, 135);
+            this.MinimumSize = new System.Drawing.Size(270, 135);
             this.Name = "Form1";
             this.Text = "FFXIITZA Auto Pause Patcher";
             this.ResumeLayout(false);
