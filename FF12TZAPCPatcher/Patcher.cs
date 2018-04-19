@@ -13,7 +13,7 @@ namespace FF12TZAPCPatcher
 
         public static readonly string FullPatchPath = Path.Combine(Environment.CurrentDirectory, PatchDirectory);
 
-        private static readonly List<BytePatch> Patches = new List<BytePatch>();
+        private static readonly List<IPatch> Patches = new List<IPatch>();
 
         private static void LoadPatches()
         {
@@ -32,7 +32,7 @@ namespace FF12TZAPCPatcher
                 }
 
                 var ext = Path.GetExtension(file);
-                if (ext == ".json")
+                if (ext.Equals(".json", StringComparison.OrdinalIgnoreCase))
                 {
                     try
                     {
@@ -52,17 +52,38 @@ namespace FF12TZAPCPatcher
                         MessageBox.Show($"Error on Deserializing: {e.Message}");
                     }
                 }
+                else if (ext.Equals(".dif", StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        var difs = DifPatch.LoadFromFile(file);
+                        var difPatch = new DifPatch(GetRealFileName(file), difs);
+                        if (!Patches.Contains(difPatch))
+                        {
+                            Patches.Add(difPatch);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show($"Error on loading dif file: {e.Message}");
+                    }
+                }
             }
         }
 
-        public static List<BytePatch> GetPatches(bool forceReload = false)
+        public static string GetRealFileName(string path)
+        {
+            return Directory.GetFiles(new FileInfo(path).Directory.FullName, Path.GetFileName(path))[0];
+        }
+
+        public static List<IPatch> GetPatches(bool forceReload = false)
         {
             if (forceReload || !Patches.Any())
             {
                 LoadPatches();
             }
 
-            return new List<BytePatch>(Patches);
+            return new List<IPatch>(Patches);
         }
     }
 }

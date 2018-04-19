@@ -7,9 +7,9 @@ namespace FF12TZAPCPatcher
     {
         private PatchStatus _status = PatchStatus.None;
 
-        internal BytePatch Patch;
+        internal IPatch Patch;
 
-        public PatchElement(BytePatch patch)
+        public PatchElement(IPatch patch)
         {
             this.Patch = patch;
             this.InitializeComponent();

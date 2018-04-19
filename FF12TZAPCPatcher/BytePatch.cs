@@ -5,13 +5,10 @@ using System.Runtime.Serialization;
 namespace FF12TZAPCPatcher
 {
     [DataContract]
-    public class BytePatch : IEquatable<BytePatch>, IComparable<BytePatch>
+    public class BytePatch : IPatch
     {
         [DataMember(Order = 2)]
         protected readonly byte[] BytesToPatch;
-
-        [DataMember(Order = 0)]
-        public readonly string Name;
 
         [DataMember(Order = 1)]
         protected readonly long Offset;
@@ -37,24 +34,8 @@ namespace FF12TZAPCPatcher
 
         #endregion
 
-        #region IComparable<BytePatch>
-
-        public int CompareTo(BytePatch other)
-        {
-            if (ReferenceEquals(this, other))
-            {
-                return 0;
-            }
-
-            if (other is null)
-            {
-                return 1;
-            }
-
-            return this.Offset.CompareTo(other.Offset);
-        }
-
-        #endregion
+        [DataMember(Order = 0)]
+        public string Name { get; private set; }
 
         #region Serialization
 
@@ -75,6 +56,45 @@ namespace FF12TZAPCPatcher
             return
                 $"{{Name: {this.Name}, Offset: {this.Offset}, BytesToPatch: [{string.Join(", ", this.BytesToPatch)}], OriginalBytes: [{string.Join(", ", this.OriginalBytes)}]}}";
         }
+
+        #region Equality
+
+        public bool Equals(IPatch x, IPatch y)
+        {
+            if (x is null || y is null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(x, y))
+            {
+                return true;
+            }
+
+            return x.Name == y.Name;
+        }
+
+        public bool Equals(IPatch other)
+        {
+            return this.Equals(this, other);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return !(obj is null) && this.Equals(obj as IPatch);
+        }
+
+        public int GetHashCode(IPatch obj)
+        {
+            return obj.GetHashCode();
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Name.GetHashCode();
+        }
+
+        #endregion
 
         #region Patching
 
@@ -107,58 +127,6 @@ namespace FF12TZAPCPatcher
             }
 
             return PatchStatus.Error;
-        }
-
-        #endregion
-
-        #region IEquatable<BytePatch>
-
-        public bool Equals(BytePatch other)
-        {
-            if (other is null)
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-
-            return FastCompare.Equal(this.OriginalBytes, other.OriginalBytes) &&
-                   FastCompare.Equal(this.BytesToPatch, other.BytesToPatch) && this.Offset == other.Offset;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is null)
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            if (obj.GetType() != this.GetType())
-            {
-                return false;
-            }
-
-            return this.Equals((BytePatch) obj);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = this.BytesToPatch.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Name.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Offset.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.OriginalBytes.GetHashCode();
-                return hashCode;
-            }
         }
 
         #endregion
