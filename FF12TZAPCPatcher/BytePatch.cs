@@ -18,7 +18,7 @@ namespace FF12TZAPCPatcher
 
         #region Constructor
 
-        public BytePatch(string name, long offset, byte[] originalBytes, byte[] bytesToPatch)
+        public BytePatch(string name, long offset, byte[] originalBytes, byte[] bytesToPatch, string description = "")
         {
             if (originalBytes.Length != bytesToPatch.Length)
             {
@@ -30,12 +30,16 @@ namespace FF12TZAPCPatcher
             this.Offset = offset;
             this.OriginalBytes = originalBytes;
             this.BytesToPatch = bytesToPatch;
+            this.Description = description;
         }
 
         #endregion
 
         [DataMember(Order = 0)]
         public string Name { get; private set; }
+
+        [DataMember(Order = 4, IsRequired = false, EmitDefaultValue = true)]
+        public string Description { get; private set; }
 
         #region Serialization
 
@@ -100,18 +104,33 @@ namespace FF12TZAPCPatcher
 
         public void Apply(FileStream stream)
         {
+            if (stream.Length < this.Offset)
+            {
+                throw new Exception($"Offset({this.Offset}) greater than file length({stream.Length}) in {this.Name}");
+            }
+
             stream.Position = this.Offset;
             stream.Write(this.BytesToPatch, 0, this.BytesToPatch.Length);
         }
 
         public void Remove(FileStream stream)
         {
+            if (stream.Length < this.Offset)
+            {
+                throw new Exception($"Offset({this.Offset}) greater than file length({stream.Length}) in {this.Name}");
+            }
+
             stream.Position = this.Offset;
             stream.Write(this.OriginalBytes, 0, this.OriginalBytes.Length);
         }
 
         public PatchStatus GetStatus(FileStream stream)
         {
+            if (stream.Length < this.Offset)
+            {
+                throw new Exception($"Offset({this.Offset}) greater than file length({stream.Length}) in {this.Name}");
+            }
+
             stream.Position = this.Offset;
             var buffer = new byte[this.BytesToPatch.Length];
             stream.Read(buffer, 0, buffer.Length);

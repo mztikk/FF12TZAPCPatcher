@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -6,15 +7,47 @@ namespace FF12TZAPCPatcher
 {
     public class DifPatch : IPatch
     {
+        public static readonly Regex DifMatch =
+            new Regex("([0-9a-fA-F]+): ([0-9a-fA-F]+) ([0-9a-fA-F]+)", RegexOptions.Compiled);
+
         private readonly ByteDif[] _difs;
 
-        public DifPatch(string name, ByteDif[] difs)
+        public DifPatch(string name, ByteDif[] difs, string description = "")
         {
             this.Name = name;
             this._difs = difs;
+            this.Description = description;
         }
 
         public string Name { get; }
+
+        public string Description { get; }
+
+        public static (ByteDif[] difs, string desc) LoadFromFile(string path)
+        {
+            var dif = File.ReadAllText(path);
+            var matches = DifMatch.Matches(dif);
+            var rtn = new ByteDif[matches.Count];
+            Match lastMatch = null;
+            for (var i = 0; i < matches.Count; i++)
+            {
+                var match = matches[i];
+                var vals = match.Value.Replace(":", string.Empty).Split(null);
+                var offset = long.Parse(vals[0], NumberStyles.HexNumber);
+                var og = byte.Parse(vals[1], NumberStyles.HexNumber);
+                var n = byte.Parse(vals[2], NumberStyles.HexNumber);
+                rtn[i] = new ByteDif(offset, og, n);
+                lastMatch = match;
+            }
+
+            string desc = string.Empty;
+            if (lastMatch != null)
+            {
+                desc = dif.Substring(lastMatch.Index + lastMatch.Value.Length);
+            }
+            
+            return (rtn, desc);
+        }
 
         #region Patching
 
@@ -23,6 +56,12 @@ namespace FF12TZAPCPatcher
             for (var i = 0; i < this._difs.Length; i++)
             {
                 var val = this._difs[i];
+                if (stream.Length < val.Offset)
+                {
+                    throw new Exception(
+                        $"Offset({val.Offset}) greater than file length({stream.Length}) in {this.Name}");
+                }
+
                 stream.Position = val.Offset;
                 stream.WriteByte(val.NewByte);
             }
@@ -33,6 +72,12 @@ namespace FF12TZAPCPatcher
             for (var i = 0; i < this._difs.Length; i++)
             {
                 var val = this._difs[i];
+                if (stream.Length < val.Offset)
+                {
+                    throw new Exception(
+                        $"Offset({val.Offset}) greater than file length({stream.Length}) in {this.Name}");
+                }
+
                 stream.Position = val.Offset;
                 stream.WriteByte(val.OriginalByte);
             }
@@ -45,6 +90,12 @@ namespace FF12TZAPCPatcher
             for (var i = 0; i < this._difs.Length; i++)
             {
                 var val = this._difs[i];
+                if (stream.Length < val.Offset)
+                {
+                    throw new Exception(
+                        $"Offset({val.Offset}) greater than file length({stream.Length}) in {this.Name}");
+                }
+
                 stream.Position = val.Offset;
                 var b = stream.ReadByte();
                 if (b == val.OriginalByte)
@@ -113,26 +164,6 @@ namespace FF12TZAPCPatcher
             return this.Name != null ? this.Name.GetHashCode() : 0;
         }
 
-        public static ByteDif[] LoadFromFile(string path)
-        {
-            var dif = File.ReadAllText(path);
-            var matches = DifMatch.Matches(dif);
-            var rtn = new ByteDif[matches.Count];
-            for (int i = 0; i < matches.Count; i++)
-            {
-                var match = matches[i];
-                var vals = match.Value.Replace(":", string.Empty).Split(null);
-                var offset = long.Parse(vals[0], NumberStyles.HexNumber);
-                var og = byte.Parse(vals[1], NumberStyles.HexNumber);
-                var n = byte.Parse(vals[2], NumberStyles.HexNumber);
-                rtn[i] = new ByteDif(offset, og, n);
-            }
-
-            return rtn;
-        }
-
-        public static readonly Regex DifMatch =
-            new Regex("([0-9a-fA-F]+): ([0-9a-fA-F]+) ([0-9a-fA-F]+)", RegexOptions.Compiled);
         #endregion
     }
 }

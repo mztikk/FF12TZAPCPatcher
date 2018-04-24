@@ -1,9 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Json;
-using System.Windows.Forms;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace FF12TZAPCPatcher
 {
@@ -13,16 +16,27 @@ namespace FF12TZAPCPatcher
 
         public static readonly string FullPatchPath = Path.Combine(Environment.CurrentDirectory, PatchDirectory);
 
-        private static readonly List<IPatch> Patches = new List<IPatch>();
+        private static readonly ObservableCollection<IPatch> _patches = new ObservableCollection<IPatch>();
 
-        private static void LoadPatches()
+        public static readonly ReadOnlyObservableCollection<IPatch> Patches =
+            new ReadOnlyObservableCollection<IPatch>(_patches);
+
+        static Patcher()
+        {
+            if (!Directory.Exists(FullPatchPath))
+            {
+                Directory.CreateDirectory(FullPatchPath);
+            }
+        }
+
+        public static void LoadPatches()
         {
             if (!Directory.Exists(FullPatchPath))
             {
                 return;
             }
 
-            Patches.Clear();
+            _patches.Clear();
             var ser = new DataContractJsonSerializer(typeof(BytePatch));
             foreach (var file in Directory.EnumerateFiles(FullPatchPath))
             {
@@ -36,14 +50,16 @@ namespace FF12TZAPCPatcher
                 {
                     try
                     {
-                        using (var stream = new FileStream(file, FileMode.Open, FileAccess.Read))
+                        using (var stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                         {
-                            var b = new byte[5];
-                            //stream.Read(b, 0, b.Length);
                             var p = (BytePatch) ser.ReadObject(stream);
-                            if (!Patches.Contains(p))
+                            if (!_patches.Contains(p))
                             {
-                                Patches.Add(p);
+                                _patches.Add(p);
+                            }
+                            else
+                            {
+                                MessageBox.Show($"A patch with the name \"{p.Name}\" already exists.");
                             }
                         }
                     }
@@ -56,11 +72,15 @@ namespace FF12TZAPCPatcher
                 {
                     try
                     {
-                        var difs = DifPatch.LoadFromFile(file);
-                        var difPatch = new DifPatch(GetRealFileName(file), difs);
-                        if (!Patches.Contains(difPatch))
+                        var (difs, desc) = DifPatch.LoadFromFile(file);
+                        var difPatch = new DifPatch(GetRealFileName(file), difs, desc);
+                        if (!_patches.Contains(difPatch))
                         {
-                            Patches.Add(difPatch);
+                            _patches.Add(difPatch);
+                        }
+                        else
+                        {
+                            MessageBox.Show($"A patch with the name \"{difPatch.Name}\" already exists.");
                         }
                     }
                     catch (Exception e)
@@ -73,17 +93,41 @@ namespace FF12TZAPCPatcher
 
         public static string GetRealFileName(string path)
         {
-            return Directory.GetFiles(new FileInfo(path).Directory.FullName, Path.GetFileName(path))[0];
+            return Path.GetFileNameWithoutExtension(Directory.GetFiles(new FileInfo(path).Directory.FullName, Path.GetFileName(path))[0]);
         }
 
-        public static List<IPatch> GetPatches(bool forceReload = false)
+        public static ReadOnlyObservableCollection<IPatch> GetPatches(bool forceReload = false)
         {
             if (forceReload || !Patches.Any())
             {
                 LoadPatches();
             }
 
-            return new List<IPatch>(Patches);
+            return Patches;
+        }
+
+        public static async Task WaitForFile(FileInfo file)
+        {
+            var fileReady = false;
+            while (!fileReady)
+            {
+                try
+                {
+                    using (file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                    {
+                        fileReady = true;
+                    }
+                }
+                catch (IOException)
+                {
+                    Debug.WriteLine($"Waiting for {file.FullName} to be available");
+                }
+
+                if (!fileReady)
+                {
+                    Thread.Sleep(50);
+                }
+            }
         }
     }
 }

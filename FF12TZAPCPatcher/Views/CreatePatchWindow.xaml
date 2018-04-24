@@ -1,0 +1,29 @@
+﻿<Window x:Class="FF12TZAPCPatcher.Views.CreatePatchWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FF12TZAPCPatcher"
+        mc:Ignorable="d"
+        Title="Create Patch File from Data" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+            <Label Content="Path to FFXII__TZA.exe:"></Label>
+            <TextBox x:Name="tbFilePath" IsEnabled="False"></TextBox>
+            <Label Content="Name of patch to be created:"></Label>
+            <TextBox x:Name="tbName"></TextBox>
+            <Label Content="Description of what the patch does:"></Label>
+            <TextBox x:Name="tbDesc"></TextBox>
+            <Label Content="Offsets in .exe file where bytes are overwritten:"></Label>
+            <TextBox x:Name="tbOffsets"></TextBox>
+            <Label Content="Original Bytes in file to restore:"></Label>
+            <TextBox x:Name="tbOriginalBytes" IsEnabled="True"></TextBox>
+            <CheckBox x:Name="cbOgFromFile" Content="Get original bytes from file." Checked="CbOgFromFile_OnChecked" Unchecked="CbOgFromFile_OnUnchecked"></CheckBox>
+            <Label Content="Patched Bytes to apply patch:"></Label>
+            <TextBox x:Name="tbPatchedBytes"></TextBox>
+            <Button x:Name="btnCreate" Content="Create" IsDefault="True" Click="BtnCreate_OnClick"></Button>
+        </StackPanel>
+        
+    </Grid>
+</Window>
+
