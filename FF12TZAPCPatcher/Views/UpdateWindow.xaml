@@ -8,23 +8,23 @@
         Title="Update" Height="200" Width="550" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="35"></RowDefinition>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="35" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Label Content="Current Version: "></Label>
-            <Label x:Name="lbCurVers" Content="1.0.0.0" Margin="30,0,0,0"></Label>
+            <Label Content="Current Version: " />
+            <Label x:Name="lbCurVers" Content="1.0.0.0" Margin="30,0,0,0" />
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Label Content="Latest Github Version: "></Label>
-            <Label x:Name="lbGitVers" Content="1.0.0.0"></Label>
+            <Label Content="Latest Github Version: " />
+            <Label x:Name="lbGitVers" Content="1.0.0.0" />
         </StackPanel>
-        <StackPanel x:Name="spUpdateInfo" Grid.Row="2">
-        </StackPanel>
+        <StackPanel x:Name="spUpdateInfo" Grid.Row="2" />
         <DockPanel Grid.Row="3">
-            <Button x:Name="btnOk" Content="Ok" Width="150" DockPanel.Dock="Bottom" IsDefault="True" IsCancel="True" Click="BtnOk_OnClick"></Button>
+            <Button x:Name="btnOk" Content="Ok" Width="150" DockPanel.Dock="Bottom" IsDefault="True" IsCancel="True"
+                    Click="BtnOk_OnClick" />
         </DockPanel>
     </Grid>
 </Window>

@@ -5,65 +5,68 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FF12TZAPCPatcher"
         mc:Ignorable="d"
-        Title="FFXII: TZA PC Patcher" Height="340" Width="600" MinHeight="340" MinWidth="600" Closing="MainWindow_OnClosing" Loaded="MainWindow_OnLoaded">
+        Title="FFXII: TZA PC Patcher" Height="340" Width="600" MinHeight="340" MinWidth="600"
+        Closing="MainWindow_OnClosing" Loaded="MainWindow_OnLoaded">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"></RowDefinition>
-            <RowDefinition Height="60"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="20" />
         </Grid.RowDefinitions>
         <Menu Grid.Row="0" Grid.ColumnSpan="2">
             <MenuItem Header="_File">
-                <MenuItem Header="_Add Patch" Click="AddPatch_OnClick"></MenuItem>
-                <MenuItem Header="_Exit" Click="Exit_OnClick"></MenuItem>
+                <MenuItem Header="_Add Patch" Click="AddPatch_OnClick" />
+                <MenuItem Header="_Exit" Click="Exit_OnClick" />
             </MenuItem>
             <MenuItem Header="_Tools">
-                <MenuItem Header="_Create Patch" Click="CreatePatch_OnClick"></MenuItem>
-                <MenuItem Header="_Options" Click="Options_OnClick"></MenuItem>
+                <MenuItem Header="_Create Patch" Click="CreatePatch_OnClick" />
+                <MenuItem Header="_Options" Click="Options_OnClick" />
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="_Check for Updates" Click="CheckForUpdate_OnClick"></MenuItem>
-                <MenuItem Header="_About" Click="About_OnClick"></MenuItem>
+                <MenuItem Header="_Check for Updates" Click="CheckForUpdate_OnClick" />
+                <MenuItem Header="_About" Click="About_OnClick" />
             </MenuItem>
         </Menu>
         <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
             <Label>Path:</Label>
             <DockPanel>
-                <Button x:Name="btnSelectPath" DockPanel.Dock="Right" MinWidth="25" Content="..." Click="BtnSelectPath_OnClick" ToolTip="Select a path."/>
-                <TextBox x:Name="tbPath" TextChanged="TbPath_OnTextChanged" ToolTip="Path to FFXII_TZA.exe."/>
+                <Button x:Name="btnSelectPath" DockPanel.Dock="Right" MinWidth="25" Content="..."
+                        Click="BtnSelectPath_OnClick" ToolTip="Select a path." />
+                <TextBox x:Name="tbPath" TextChanged="TbPath_OnTextChanged" ToolTip="Path to FFXII_TZA.exe." />
 
             </DockPanel>
 
         </StackPanel>
         <DockPanel Grid.Row="2" Grid.Column="0">
-            <Button x:Name="btnRefresh" Content="Refresh Patches" DockPanel.Dock="Top" Click="BtnRefresh_OnClick" ToolTip="Reload patches from disk and refresh list."></Button>
-            <ListBox x:Name="lbPatches" ItemsSource="{Binding Source={x:Static local:Patcher.Patches}}" DisplayMemberPath="Name" SelectionMode="Single" SelectionChanged="LbPatches_OnSelectionChanged"></ListBox>
+            <Button x:Name="btnRefresh" Content="Refresh Patches" DockPanel.Dock="Top" Click="BtnRefresh_OnClick"
+                    ToolTip="Reload patches from disk and refresh list." />
+            <ListBox x:Name="lbPatches" ItemsSource="{Binding Source={x:Static local:Patcher.Patches}}"
+                     DisplayMemberPath="Name" SelectionMode="Single" SelectionChanged="LbPatches_OnSelectionChanged" />
         </DockPanel>
         <Border x:Name="borderPatchDisplay" Grid.Row="2" Grid.Column="1" BorderBrush="#FFB4B4B4" BorderThickness="0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="100"></ColumnDefinition>
-                    <ColumnDefinition Width="100"></ColumnDefinition>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="40" />
                 </Grid.RowDefinitions>
-                <StackPanel x:Name="spPatchDisplay" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
-                </StackPanel>
-                <DockPanel x:Name="patchDisplayBtnApply" Grid.Column="1" Grid.Row="1"></DockPanel>
-                <DockPanel x:Name="patchDisplayBtnRemove" Grid.Column="2" Grid.Row="1"></DockPanel>
+                <StackPanel x:Name="spPatchDisplay" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" />
+                <DockPanel x:Name="patchDisplayBtnApply" Grid.Column="1" Grid.Row="1" />
+                <DockPanel x:Name="patchDisplayBtnRemove" Grid.Column="2" Grid.Row="1" />
             </Grid>
         </Border>
         <!--<DockPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
             <StatusBar x:Name="statusBar" DockPanel.Dock="Bottom"></StatusBar>
         </DockPanel>-->
-        
+
     </Grid>
 </Window>

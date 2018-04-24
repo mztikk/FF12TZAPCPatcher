@@ -40,12 +40,12 @@ namespace FF12TZAPCPatcher
                 lastMatch = match;
             }
 
-            string desc = string.Empty;
+            var desc = string.Empty;
             if (lastMatch != null)
             {
-                desc = dif.Substring(lastMatch.Index + lastMatch.Value.Length);
+                desc = dif.Substring(lastMatch.Index + lastMatch.Value.Length + 2);
             }
-            
+
             return (rtn, desc);
         }
 

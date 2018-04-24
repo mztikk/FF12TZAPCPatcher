@@ -8,22 +8,22 @@
         Title="Create Patch File from Data" Height="450" Width="800">
     <Grid>
         <StackPanel>
-            <Label Content="Path to FFXII__TZA.exe:"></Label>
-            <TextBox x:Name="tbFilePath" IsEnabled="False"></TextBox>
-            <Label Content="Name of patch to be created:"></Label>
-            <TextBox x:Name="tbName"></TextBox>
-            <Label Content="Description of what the patch does:"></Label>
-            <TextBox x:Name="tbDesc"></TextBox>
-            <Label Content="Offsets in .exe file where bytes are overwritten:"></Label>
-            <TextBox x:Name="tbOffsets"></TextBox>
-            <Label Content="Original Bytes in file to restore:"></Label>
-            <TextBox x:Name="tbOriginalBytes" IsEnabled="True"></TextBox>
-            <CheckBox x:Name="cbOgFromFile" Content="Get original bytes from file." Checked="CbOgFromFile_OnChecked" Unchecked="CbOgFromFile_OnUnchecked"></CheckBox>
-            <Label Content="Patched Bytes to apply patch:"></Label>
-            <TextBox x:Name="tbPatchedBytes"></TextBox>
-            <Button x:Name="btnCreate" Content="Create" IsDefault="True" Click="BtnCreate_OnClick"></Button>
+            <Label Content="Path to FFXII__TZA.exe:" />
+            <TextBox x:Name="tbFilePath" IsEnabled="False" />
+            <Label Content="Name of patch to be created:" />
+            <TextBox x:Name="tbName" />
+            <Label Content="Description of what the patch does:" />
+            <TextBox x:Name="tbDesc" />
+            <Label Content="Offsets in .exe file where bytes are overwritten:" />
+            <TextBox x:Name="tbOffsets" />
+            <Label Content="Original Bytes in file to restore:" />
+            <TextBox x:Name="tbOriginalBytes" IsEnabled="True" />
+            <CheckBox x:Name="cbOgFromFile" Content="Get original bytes from file." Checked="CbOgFromFile_OnChecked"
+                      Unchecked="CbOgFromFile_OnUnchecked" />
+            <Label Content="Patched Bytes to apply patch:" />
+            <TextBox x:Name="tbPatchedBytes" />
+            <Button x:Name="btnCreate" Content="Create" IsDefault="True" Click="BtnCreate_OnClick" />
         </StackPanel>
-        
+
     </Grid>
 </Window>
-

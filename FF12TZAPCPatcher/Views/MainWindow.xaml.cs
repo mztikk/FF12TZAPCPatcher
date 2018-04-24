@@ -71,7 +71,7 @@ namespace FF12TZAPCPatcher.Views
             {
                 var desc = new TextBlock
                 {
-                    Text = patch.Description,
+                    Text = $"Description: {Environment.NewLine}{patch.Description}",
                     Margin = new Thickness(5, 0, 0, 0),
                     TextWrapping = TextWrapping.Wrap
                 };
@@ -199,9 +199,15 @@ namespace FF12TZAPCPatcher.Views
                 this.patchDisplayBtnRemove.Children[0].IsEnabled = false;
                 var errorStatus = new TextBlock
                 {
-                    Text = $"Neither patched nor original bytes match the file.",
+                    Text = $"Error: Neither patched nor original bytes match the file.",
                     Margin = new Thickness(5, 0, 0, 0)
                 };
+                errorStatus.TextEffects.Add(new TextEffect
+                {
+                    Foreground = Brushes.Red,
+                    PositionStart = 0,
+                    PositionCount = 6
+                });
                 this.spPatchDisplay.Children.Add(errorStatus);
             }
         }

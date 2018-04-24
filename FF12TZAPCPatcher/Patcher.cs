@@ -93,7 +93,8 @@ namespace FF12TZAPCPatcher
 
         public static string GetRealFileName(string path)
         {
-            return Path.GetFileNameWithoutExtension(Directory.GetFiles(new FileInfo(path).Directory.FullName, Path.GetFileName(path))[0]);
+            return Path.GetFileNameWithoutExtension(Directory.GetFiles(new FileInfo(path).Directory.FullName,
+                Path.GetFileName(path))[0]);
         }
 
         public static ReadOnlyObservableCollection<IPatch> GetPatches(bool forceReload = false)
