@@ -1,0 +1,42 @@
+﻿<Window x:Class="FF12TZAPCPatcher.Views.OptionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FF12TZAPCPatcher"
+        mc:Ignorable="d"
+        Title="Options" Height="250" Width="450" MinHeight="250" MinWidth="450">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="spSettings">
+                <CheckBox x:Name="cbAutowatch" Content="Watch patches directory"
+                          ToolTip="Watches the patches directory for changes to automatically refresh the list if a change occured." />
+                <CheckBox x:Name="cbCheckUpdtStart" Content="Check for Updates on start"
+                          ToolTip="Opens the update window on startup if there is a newer version available." />
+            </StackPanel>
+        </ScrollViewer>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Row="0">
+                <Button x:Name="btnSave" IsDefault="True" Click="BtnSave_OnClick" DockPanel.Dock="Bottom">
+                    <TextBlock Text="Save" />
+                </Button>
+            </DockPanel>
+            <DockPanel Grid.Row="1">
+                <Button x:Name="btnCancel" IsCancel="True" Click="BtnCancel_OnClick" DockPanel.Dock="Bottom">
+                    <TextBlock Text="Cancel" />
+                </Button>
+            </DockPanel>
+
+        </Grid>
+
+    </Grid>
+</Window>

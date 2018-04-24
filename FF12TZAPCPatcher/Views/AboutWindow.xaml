@@ -1,0 +1,36 @@
+﻿<Window x:Class="FF12TZAPCPatcher.Views.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FF12TZAPCPatcher.Views"
+        mc:Ignorable="d"
+        Title="About" Height="160" Width="350" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="35" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <Label Content="Final Fantasy XII: The Zodiac Age Patcher by mztikk" />
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <TextBlock Margin="5,0,0,0">
+                <Hyperlink NavigateUri="https://github.com/mztikk/FF12TZAPCPatcher"
+                           RequestNavigate="Hyperlink_OnRequestNavigate">
+                    https://github.com/mztikk/FF12TZAPCPatcher
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Label Content="Version: " />
+            <Label x:Name="lbVersion" Content="1.0.0.0" />
+        </StackPanel>
+        <DockPanel Grid.Row="3">
+            <Button x:Name="btnOk" Content="Ok" Width="150" DockPanel.Dock="Bottom" IsDefault="True" IsCancel="True"
+                    Click="BtnOk_OnClick" />
+        </DockPanel>
+    </Grid>
+</Window>
